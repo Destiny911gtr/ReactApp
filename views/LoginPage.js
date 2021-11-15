@@ -9,7 +9,7 @@ import {
   Image,
 } from 'react-native';
 
-import {VerifyCredentials} from '../components/VerifyCredentials';
+import {VerifyCredentials} from '../components/Utils';
 import * as colors from '../components/Colors';
 
 const LoginPage = ({navigation}) => {

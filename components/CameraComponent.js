@@ -8,7 +8,7 @@ import {
 import { RNCamera } from 'react-native-camera';
 import Icon from 'react-native-vector-icons/Feather';
 
-import * as colors from '../components/Colors';
+import * as colors from './Colors';
 
 class CameraComponent extends PureComponent {
   render() {
