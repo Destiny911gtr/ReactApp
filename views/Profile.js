@@ -15,6 +15,12 @@ const Profile = ({navigation, route}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.textBox}>Email: {route.params.email}</Text>
+      <Text style={styles.textBox}>
+        Latitude: {route.params.coords.latitude}
+      </Text>
+      <Text style={styles.textBox}>
+        Longitude: {route.params.coords.longitude}
+      </Text>
       <TouchableOpacity
         style={styles.btn}
         onPress={() => navigation.navigate('Camera')}>
@@ -45,6 +51,11 @@ const Profile = ({navigation, route}) => {
           })
         }>
         <Text style={styles.btnText}>Gallery</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.btn}
+        onPress={() => navigation.navigate('Contacts')}>
+        <Text style={styles.btnText}>Contacts</Text>
       </TouchableOpacity>
     </View>
   );
