@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Geolocation from '@react-native-community/geolocation';
 import {
   View,
   Text,
@@ -13,9 +12,7 @@ import {
 import {VerifyCredentials} from '../components/Utils';
 import * as colors from '../components/Colors';
 
-let coords;
 
-Geolocation.getCurrentPosition(info => coords = info.coords);
 
 const LoginPage = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -57,7 +54,7 @@ const LoginPage = ({navigation}) => {
         style={styles.loginBtn}
         onPress={() =>
           VerifyCredentials(email, password)
-            ? navigation.navigate('Profile', {email, coords})
+            ? navigation.navigate('Profile', {email})
             : null
         }>
         <Text style={styles.loginText}>Login</Text>

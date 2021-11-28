@@ -1,3 +1,4 @@
+import {PermissionsAndroid} from 'react-native';
 //
 // Verify email and password
 //
@@ -15,5 +16,28 @@ export function VerifyCredentials(email, password) {
     } else {
       return true;
     }
+  }
+}
+//
+// Request location permission
+//
+export async function requestLocationPermission() {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      {
+        title: 'Location Permission',
+        message:
+          'This App needs access to your location ' +
+          'so we can know where you are.',
+      },
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log('You can use locations ');
+    } else {
+      console.log('Location permission denied');
+    }
+  } catch (err) {
+    console.warn(err);
   }
 }
