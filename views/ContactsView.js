@@ -1,19 +1,11 @@
-// Access Device’s Contact List in React Native App
-// https://aboutreact.com/access-contact-list-react-native/
-
-// Import React
 import React, {useState, useEffect} from 'react';
-
-// Import all required component
 import {
   PermissionsAndroid,
   Platform,
   SafeAreaView,
   StyleSheet,
-  Text,
   View,
   FlatList,
-  TextInput,
 } from 'react-native';
 
 import Contacts from 'react-native-contacts';

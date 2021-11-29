@@ -1,8 +1,7 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, ToastAndroid, TouchableOpacity} from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/Feather';
-import axios from 'axios';
 import Geolocation from '@react-native-community/geolocation';
 
 import * as colors from '../components/Colors';
@@ -64,8 +63,11 @@ const Profile = ({navigation, route}) => {
                 );
                 alert(response.customButton);
               } else {
-                const source = {uri: response.uri};
-                console.log('response', JSON.stringify(response));
+                const source = { uri: response.uri };
+                ToastAndroid.show(
+                  JSON.stringify(response.assets[0]['uri']),
+                  ToastAndroid.LONG,
+                );
               }
             })
           }>

@@ -7,7 +7,7 @@ import {
 import CameraComponent from '../components/CameraComponent';
 import * as colors from '../components/Colors';
 
-const Camera = ({navigation, route}) => {
+const Camera = () => {
     return (
       <View style={styles.container}>
         <CameraComponent />

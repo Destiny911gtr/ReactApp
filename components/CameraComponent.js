@@ -2,6 +2,7 @@
 import React, {PureComponent} from 'react';
 import {
   StyleSheet,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -11,6 +12,13 @@ import Icon from 'react-native-vector-icons/Feather';
 import * as colors from './Colors';
 
 class CameraComponent extends PureComponent {
+  showToast = ({message}) => {
+    ToastAndroid.show(
+      message.toString(),
+      ToastAndroid.LONG
+    );
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -44,6 +52,7 @@ class CameraComponent extends PureComponent {
     if (this.camera) {
       const options = {quality: 0.5, base64: true};
       const data = await this.camera.takePictureAsync(options);
+      this.showToast({message: data.uri});
       console.log(data.uri);
     }
   };
