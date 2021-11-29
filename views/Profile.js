@@ -33,31 +33,14 @@ const Profile = ({navigation, route}) => {
       maximumAge: 1000,
     },
   );
-  const fetchData = async () => {
-    const source = axios.CancelToken.source();
-    const url = `https://www.swapi.it/api/people`;
-    console.log('fetching data');
-    try {
-      const response = await axios.get(url, {cancelToken: source.token});
-      if (response.status === 200) {
-        console.log(response.data);
-        navigation.navigate('ApiData', {data: response.data}); //navigate to the next screen and pass data
-        return;
-      } else {
-        throw new Error('Failed to fetch data');
-      }
-    } catch (error) {
-      if (axios.isCancel(error)) {
-        console.log('Data fetching cancelled');
-      }
-    }
-  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.textBox}>Email: {route.params.email}</Text>
-      <Text style={styles.textBox}>Latitude: {latitude}</Text>
-      <Text style={styles.textBox}>Longitude: {longitude}</Text>
+      <View style={styles.box}>
+        <Text style={styles.text}>Email: {route.params.email}</Text>
+        <Text style={styles.text}>Latitude: {latitude}</Text>
+        <Text style={styles.text}>Longitude: {longitude}</Text>
+      </View>
       <View style={[{flexDirection: 'row'}]}>
         <TouchableOpacity
           style={styles.btn}
@@ -83,11 +66,6 @@ const Profile = ({navigation, route}) => {
               } else {
                 const source = {uri: response.uri};
                 console.log('response', JSON.stringify(response));
-                // this.setState({
-                //   filePath: response,
-                //   fileData: response.data,
-                //   fileUri: response.uri,
-                // });
               }
             })
           }>
@@ -98,7 +76,9 @@ const Profile = ({navigation, route}) => {
           onPress={() => navigation.navigate('Contacts')}>
           <Icon name="users" size={20} color={colors.backgroundCol} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btn} onPress={() => fetchData()}>
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={() => navigation.navigate('ApiData')}>
           <Icon name="download-cloud" size={20} color={colors.backgroundCol} />
         </TouchableOpacity>
       </View>
@@ -113,7 +93,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  textBox: {
+  box: {
+    padding: 20,
+    borderRadius: 10,
+    backgroundColor: colors.secondaryCol,
+    alignItems: 'center',
+  },
+  text: {
     color: colors.foregroundCol,
   },
   btnText: {
