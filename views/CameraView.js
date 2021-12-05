@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
@@ -7,12 +7,14 @@ import {
 import CameraComponent from '../components/CameraComponent';
 import * as colors from '../components/Colors';
 
-const Camera = () => {
+class Camera extends Component {
+  render() {
     return (
       <View style={styles.container}>
         <CameraComponent />
       </View>
     );
+  }
 }
 
 const styles = StyleSheet.create({
