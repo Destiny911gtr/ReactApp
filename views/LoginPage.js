@@ -8,11 +8,18 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 
 import {VerifyCredentials} from '../components/Utils';
 import * as colors from '../components/Colors';
 
-
+GoogleSignin.configure({
+  // accountName: '[Android]'
+});
 
 const LoginPage = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -24,6 +31,30 @@ const LoginPage = ({navigation}) => {
 
   const handlePasswordInput = text => {
     setPassword(text);
+  };
+
+  signIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      this.setState({ userInfo });
+      console.log(userInfo);
+      navigation.navigate('Profile', {email});
+    } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+        console.log('SIGN_IN_CANCELLED');
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+        console.log('IN_PROGRESS');
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+        console.log('PLAY_SERVICES_NOT_AVAILABLE');
+      } else {
+        // some other error happened
+        console.log(error);
+      }
+    }
   };
 
   return (
@@ -59,6 +90,13 @@ const LoginPage = ({navigation}) => {
         }>
         <Text style={styles.loginText}>Login</Text>
       </TouchableOpacity>
+      <GoogleSigninButton
+        style={{width: 192, height: 48, marginTop: 20}}
+        size={GoogleSigninButton.Size.Wide}
+        color={GoogleSigninButton.Color.Dark}
+        onPress={signIn}
+        // disabled={isSigninInProgress}
+      />
     </View>
   );
 };
