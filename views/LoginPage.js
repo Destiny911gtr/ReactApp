@@ -17,9 +17,7 @@ import {
 import {VerifyCredentials} from '../components/Utils';
 import * as colors from '../components/Colors';
 
-GoogleSignin.configure({
-  // accountName: '[Android]'
-});
+GoogleSignin.configure();
 
 const LoginPage = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -95,7 +93,6 @@ const LoginPage = ({navigation}) => {
         size={GoogleSigninButton.Size.Wide}
         color={GoogleSigninButton.Color.Dark}
         onPress={signIn}
-        // disabled={isSigninInProgress}
       />
     </View>
   );
