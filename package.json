@@ -23,9 +23,11 @@
     "react-native-contacts": "^7.0.2",
     "react-native-image-picker": "^4.2.1",
     "react-native-login-screen": "^2.1.4",
+    "react-native-redux": "^1.0.11",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.9.0",
-    "react-native-vector-icons": "^9.0.0"
+    "react-native-vector-icons": "^9.0.0",
+    "react-redux": "^7.2.6"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

@@ -1,11 +1,14 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, ToastAndroid, TouchableOpacity} from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
+import {Provider} from 'react-redux';
+import {createStore} from 'redux';
 import Icon from 'react-native-vector-icons/Feather';
 import Geolocation from '@react-native-community/geolocation';
 
 import * as colors from '../components/Colors';
 import * as utils from '../components/Utils';
+import Counter from '../components/CounterComponent';
 
 let options = {
   storageOptions: {
@@ -13,6 +16,19 @@ let options = {
     path: 'images',
   },
 };
+const initialState = {
+  counter: 0,
+};
+const reducer = (state = initialState, action) => {
+  switch (action.type) {
+    case 'INCREASE_COUNTER':
+      return {counter: state.counter + 1};
+    case 'DECREASE_COUNTER':
+      return {counter: state.counter - 1};
+  }
+  return state;
+};
+const store = createStore(reducer);
 
 const Profile = ({navigation, route}) => {
   const [latitude, setLatitude] = useState(0);
@@ -63,7 +79,7 @@ const Profile = ({navigation, route}) => {
                 );
                 alert(response.customButton);
               } else {
-                const source = { uri: response.uri };
+                const source = {uri: response.uri};
                 ToastAndroid.show(
                   JSON.stringify(response.assets[0]['uri']),
                   ToastAndroid.LONG,
@@ -83,6 +99,11 @@ const Profile = ({navigation, route}) => {
           onPress={() => navigation.navigate('ApiData')}>
           <Icon name="download-cloud" size={20} color={colors.backgroundCol} />
         </TouchableOpacity>
+      </View>
+      <View>
+        <Provider store={store}>
+          <Counter />
+        </Provider>
       </View>
     </View>
   );
