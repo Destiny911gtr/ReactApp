@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import {Alert} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import messaging from '@react-native-firebase/messaging';
 
 import LoginPage from './views/LoginPage';
 import Profile from './views/Profile';
@@ -13,6 +15,38 @@ const Stack = createNativeStackNavigator();
 
 
 export default function App() {
+  getFcmToken = async () => {
+    const fcmToken = await messaging().getToken();
+    if (fcmToken) {
+      console.log(fcmToken);
+      console.log('Your Firebase Token is:', fcmToken);
+    } else {
+      console.log('Failed', 'No token received');
+    }
+  };
+
+  requestUserPermission = async () => {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+    if (enabled) {
+      getFcmToken();
+      console.log('Authorization status:', authStatus);
+    }
+  };
+
+  useEffect(() => {
+    requestUserPermission();
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert(
+        JSON.stringify(remoteMessage.notification.title).replace(/"/g, ''),
+        JSON.stringify(remoteMessage.notification.body).replace(/"/g, ''),
+      );
+    });
+    return unsubscribe;
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
