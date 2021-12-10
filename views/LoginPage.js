@@ -17,13 +17,12 @@ import {
 import {VerifyCredentials} from '../components/Utils';
 import * as colors from '../components/Colors';
 
-GoogleSignin.configure({
-  // accountName: '[Android]'
-});
+GoogleSignin.configure();
 
-const LoginPage = ({navigation}) => {
+const LoginPage = ({navigation, route}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [userInfo, setUserInfo] = useState(route.params?.userInfo ?? null);
 
   const handleEmailInput = text => {
     setEmail(text);
@@ -33,13 +32,17 @@ const LoginPage = ({navigation}) => {
     setPassword(text);
   };
 
+  const setUserInfoToState = userInfo => {
+    setUserInfo(userInfo);
+  };
+
   signIn = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      this.setState({ userInfo });
-      console.log(userInfo);
-      navigation.navigate('Profile', {email});
+      setUserInfoToState({ userInfo });
+      setEmail(userInfo.user.email);
+      navigation.replace('Profile', {email: userInfo.user.email});
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
@@ -66,37 +69,41 @@ const LoginPage = ({navigation}) => {
           source={require('../assets/images/login_image.png')}
         />
       </View>
-      <TextInput
-        style={styles.textInput}
-        placeholder="Email"
-        placeholderTextColor={colors.foregroundCol}
-        onChangeText={handleEmailInput}
-        value={email}
-      />
-      <TextInput
-        style={styles.textInput}
-        placeholder="Password"
-        placeholderTextColor={colors.foregroundCol}
-        onChangeText={handlePasswordInput}
-        secureTextEntry={true}
-        value={password}
-      />
-      <TouchableOpacity
-        style={styles.loginBtn}
-        onPress={() =>
-          VerifyCredentials(email, password)
-            ? navigation.navigate('Profile', {email})
-            : null
-        }>
-        <Text style={styles.loginText}>Login</Text>
-      </TouchableOpacity>
-      <GoogleSigninButton
-        style={{width: 192, height: 48, marginTop: 20}}
-        size={GoogleSigninButton.Size.Wide}
-        color={GoogleSigninButton.Color.Dark}
-        onPress={signIn}
-        // disabled={isSigninInProgress}
-      />
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.textInput}
+          placeholder="Email"
+          placeholderTextColor={colors.foregroundCol}
+          onChangeText={handleEmailInput}
+          value={email}
+        />
+        <TextInput
+          style={styles.textInput}
+          placeholder="Password"
+          placeholderTextColor={colors.foregroundCol}
+          onChangeText={handlePasswordInput}
+          secureTextEntry={true}
+          value={password}
+        />
+      </View>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={styles.loginBtn}
+          onPress={() =>
+            VerifyCredentials(email, password)
+              ? navigation.navigate('Profile', {email})
+              : null
+          }>
+          <Text style={styles.loginText}>Login</Text>
+        </TouchableOpacity>
+        <GoogleSigninButton
+          style={{width: 140, height: 48, marginTop: 20}}
+          size={GoogleSigninButton.Size.Standard}
+          color={GoogleSigninButton.Color.Dark}
+          onPress={signIn}
+          // disabled={isSigninInProgress}
+        />
+      </View>
     </View>
   );
 };
@@ -109,14 +116,30 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logoContainer: {
+    flex: 2,
     justifyContent: 'center',
     alignContent: 'center',
     paddingBottom: 20,
+    paddingTop: '20%',
+    width: '100%',
+  },
+  inputContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+  },
+  buttonContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    paddingBottom:'20%',
   },
   logo: {
-    height: 200,
-    width: 200,
+    width: '70%',
     resizeMode: 'contain',
+    alignSelf: 'center',
   },
   loginText: {
     color: colors.backgroundCol,

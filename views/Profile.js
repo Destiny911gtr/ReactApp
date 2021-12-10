@@ -1,10 +1,13 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, ToastAndroid, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, StatusBar, ToastAndroid, TouchableOpacity} from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {Provider} from 'react-redux';
 import {createStore} from 'redux';
 import Icon from 'react-native-vector-icons/Feather';
 import Geolocation from '@react-native-community/geolocation';
+import {
+  GoogleSignin,
+} from '@react-native-google-signin/google-signin';
 
 import * as colors from '../components/Colors';
 import * as utils from '../components/Utils';
@@ -49,63 +52,82 @@ const Profile = ({navigation, route}) => {
     },
   );
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.box}>
-        <Text style={styles.text}>Email: {route.params.email}</Text>
-        <Text style={styles.text}>Latitude: {latitude}</Text>
-        <Text style={styles.text}>Longitude: {longitude}</Text>
-      </View>
-      <View style={[{flexDirection: 'row'}]}>
-        <TouchableOpacity
-          style={styles.btn}
-          onPress={() => navigation.navigate('Camera')}>
-          <Icon name="camera" size={20} color={colors.backgroundCol} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.btn}
-          onPress={() =>
-            launchImageLibrary(options, response => {
-              console.log('Response = ', response);
+  signOut = async () => {
+    try {
+      await GoogleSignin.signOut();
+      navigation.replace('Login', {userInfo: null});
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-              if (response.didCancel) {
-                console.log('User cancelled image picker');
-              } else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-              } else if (response.customButton) {
-                console.log(
-                  'User tapped custom button: ',
-                  response.customButton,
-                );
-                alert(response.customButton);
-              } else {
-                const source = {uri: response.uri};
-                ToastAndroid.show(
-                  JSON.stringify(response.assets[0]['uri']),
-                  ToastAndroid.LONG,
-                );
-              }
-            })
-          }>
-          <Icon name="image" size={20} color={colors.backgroundCol} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.btn}
-          onPress={() => navigation.navigate('Contacts')}>
-          <Icon name="users" size={20} color={colors.backgroundCol} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.btn}
-          onPress={() => navigation.navigate('ApiData')}>
-          <Icon name="download-cloud" size={20} color={colors.backgroundCol} />
-        </TouchableOpacity>
-      </View>
-      <View>
-        <Provider store={store}>
+
+  return (
+    <Provider store={store}>
+      <View style={styles.container}>
+        <StatusBar translucent backgroundColor="transparent" />
+        <View style={styles.box}>
+          <Text style={styles.text}>Email: {route.params.email}</Text>
+          <Text style={styles.text}>Latitude: {latitude}</Text>
+          <Text style={styles.text}>Longitude: {longitude}</Text>
+        </View>
+        <View style={[{flexDirection: 'row'}]}>
+          <TouchableOpacity
+            style={styles.btn}
+            onPress={() => navigation.navigate('Camera')}>
+            <Icon name="camera" size={20} color={colors.backgroundCol} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.btn}
+            onPress={() =>
+              launchImageLibrary(options, response => {
+                console.log('Response = ', response);
+
+                if (response.didCancel) {
+                  console.log('User cancelled image picker');
+                } else if (response.error) {
+                  console.log('ImagePicker Error: ', response.error);
+                } else if (response.customButton) {
+                  console.log(
+                    'User tapped custom button: ',
+                    response.customButton,
+                  );
+                  alert(response.customButton);
+                } else {
+                  const source = {uri: response.uri};
+                  ToastAndroid.show(
+                    JSON.stringify(response.assets[0]['uri']),
+                    ToastAndroid.LONG,
+                  );
+                }
+              })
+            }>
+            <Icon name="image" size={20} color={colors.backgroundCol} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.btn}
+            onPress={() => navigation.navigate('Contacts')}>
+            <Icon name="users" size={20} color={colors.backgroundCol} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.btn}
+            onPress={() => navigation.navigate('ApiData')}>
+            <Icon
+              name="download-cloud"
+              size={20}
+              color={colors.backgroundCol}
+            />
+          </TouchableOpacity>
+        </View>
+        <View>
           <Counter />
-        </Provider>
+        </View>
+        <TouchableOpacity style={styles.btn}
+          onPress={signOut}>
+          <Icon name="log-out" size={20} color={colors.backgroundCol} />
+        </TouchableOpacity>
       </View>
-    </View>
+    </Provider>
   );
 };
 
