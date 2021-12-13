@@ -9,6 +9,7 @@ import LoginPage from './views/LoginPage';
 import Profile from './views/Profile';
 import ContactsView from './views/ContactsView';
 import DataView from './views/DataView';
+import ImageView from './views/ImageView';
 import * as colors from './components/Colors';
 
 const Stack = createNativeStackNavigator();
@@ -75,9 +76,17 @@ export default function App() {
           }}
         />
         <Stack.Screen
+          name="ImageView"
+          component={ImageView}
+          options={{
+            headerTintColor: colors.foregroundCol,
+            headerStyle: {backgroundColor: colors.backgroundCol},
+          }}
+        />
+        <Stack.Screen
           name="ApiData"
           component={DataView}
-          options={({ navigation }) =>({
+          options={({navigation}) => ({
             headerTintColor: colors.foregroundCol,
             headerStyle: {backgroundColor: colors.backgroundCol},
             headerRight: () => (

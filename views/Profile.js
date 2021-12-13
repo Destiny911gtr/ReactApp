@@ -86,12 +86,8 @@ const Profile = ({navigation, route}) => {
                   } else if (response.error) {
                     console.log('Camera Error: ', response.error);
                   } else {
-                    const source = {uri: response.assets[0].uri};
-                    console.log(response.assets[0].uri);
-                    ToastAndroid.show(
-                    JSON.stringify(response.assets[0].uri).replace(/['"]+/g, ''),
-                    ToastAndroid.LONG,
-                  );
+                    const source = {uri: JSON.stringify(response.assets[0].uri).replace(/['"]+/g, '')};
+                    navigation.navigate('ImageView', {image: source.uri});
                   }
                 });
               })}>
@@ -101,18 +97,16 @@ const Profile = ({navigation, route}) => {
             style={styles.btn}
             onPress={() =>
               launchImageLibrary(options, response => {
-                console.log('Response = ', response);
+                // console.log('Response = ', response);
 
                 if (response.didCancel) {
                   console.log('User cancelled image picker');
                 } else if (response.error) {
                   console.log('ImagePicker Error: ', response.error);
                 } else {
-                  const source = {uri: response.assets[0].uri};
-                  ToastAndroid.show(
-                    JSON.stringify(response.assets[0].uri).replace(/['"]+/g, ''),
-                    ToastAndroid.LONG,
-                  );
+                  const source = { uri: response.assets[0].uri };
+                  console.log(response.assets[0].uri);
+                  navigation.navigate('ImageView', {image: JSON.stringify(response.assets[0].uri).replace(/['"]+/g, '')});
                 }
               })
             }>
