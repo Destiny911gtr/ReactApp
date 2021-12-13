@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import {Alert} from 'react-native';
+import {Alert, Button, TouchableOpacity} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import messaging from '@react-native-firebase/messaging';
+import Icon from 'react-native-vector-icons/Feather';
 
 import LoginPage from './views/LoginPage';
 import Profile from './views/Profile';
-import CameraComponent from './views/CameraView';
 import ContactsView from './views/ContactsView';
 import DataView from './views/DataView';
 import * as colors from './components/Colors';
@@ -67,14 +67,6 @@ export default function App() {
           }}
         />
         <Stack.Screen
-          name="Camera"
-          component={CameraComponent}
-          options={{
-            headerTintColor: colors.foregroundCol,
-            headerStyle: {backgroundColor: colors.backgroundCol},
-          }}
-        />
-        <Stack.Screen
           name="Contacts"
           component={ContactsView}
           options={{
@@ -85,10 +77,15 @@ export default function App() {
         <Stack.Screen
           name="ApiData"
           component={DataView}
-          options={{
+          options={({ navigation }) =>({
             headerTintColor: colors.foregroundCol,
             headerStyle: {backgroundColor: colors.backgroundCol},
-          }}
+            headerRight: () => (
+              <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+                <Icon name="settings" size={20} color={colors.foregroundCol} />
+              </TouchableOpacity>
+            ),
+          })}
         />
       </Stack.Navigator>
     </NavigationContainer>

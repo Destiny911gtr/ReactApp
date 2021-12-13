@@ -42,7 +42,7 @@ const LoginPage = ({navigation, route}) => {
       const userInfo = await GoogleSignin.signIn();
       setUserInfoToState({ userInfo });
       setEmail(userInfo.user.email);
-      navigation.replace('Profile', {email: userInfo.user.email});
+      navigation.replace('ApiData');
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow

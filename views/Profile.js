@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, StatusBar, ToastAndroid, TouchableOpacity} from 'react-native';
-import {launchImageLibrary} from 'react-native-image-picker';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import {Provider} from 'react-redux';
 import {createStore} from 'redux';
 import Icon from 'react-native-vector-icons/Feather';
@@ -67,14 +67,34 @@ const Profile = ({navigation, route}) => {
       <View style={styles.container}>
         <StatusBar translucent backgroundColor="transparent" />
         <View style={styles.box}>
-          <Text style={styles.text}>Email: {route.params.email}</Text>
+          <Text style={styles.text}>
+            Email: {route.params?.email ?? 'Not Available'}
+          </Text>
           <Text style={styles.text}>Latitude: {latitude}</Text>
           <Text style={styles.text}>Longitude: {longitude}</Text>
         </View>
         <View style={[{flexDirection: 'row'}]}>
           <TouchableOpacity
             style={styles.btn}
-            onPress={() => navigation.navigate('Camera')}>
+            onPress={() =>
+              utils.requestCameraPermission().then(() => {
+                launchCamera(options, response => {
+                  console.log('Response = ', response);
+
+                  if (response.didCancel) {
+                    console.log('User cancelled image capture');
+                  } else if (response.error) {
+                    console.log('Camera Error: ', response.error);
+                  } else {
+                    const source = {uri: response.assets[0].uri};
+                    console.log(response.assets[0].uri);
+                    ToastAndroid.show(
+                    JSON.stringify(response.assets[0].uri).replace(/['"]+/g, ''),
+                    ToastAndroid.LONG,
+                  );
+                  }
+                });
+              })}>
             <Icon name="camera" size={20} color={colors.backgroundCol} />
           </TouchableOpacity>
           <TouchableOpacity
@@ -87,16 +107,10 @@ const Profile = ({navigation, route}) => {
                   console.log('User cancelled image picker');
                 } else if (response.error) {
                   console.log('ImagePicker Error: ', response.error);
-                } else if (response.customButton) {
-                  console.log(
-                    'User tapped custom button: ',
-                    response.customButton,
-                  );
-                  alert(response.customButton);
                 } else {
-                  const source = {uri: response.uri};
+                  const source = {uri: response.assets[0].uri};
                   ToastAndroid.show(
-                    JSON.stringify(response.assets[0]['uri']),
+                    JSON.stringify(response.assets[0].uri).replace(/['"]+/g, ''),
                     ToastAndroid.LONG,
                   );
                 }
@@ -109,21 +123,11 @@ const Profile = ({navigation, route}) => {
             onPress={() => navigation.navigate('Contacts')}>
             <Icon name="users" size={20} color={colors.backgroundCol} />
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.btn}
-            onPress={() => navigation.navigate('ApiData')}>
-            <Icon
-              name="download-cloud"
-              size={20}
-              color={colors.backgroundCol}
-            />
-          </TouchableOpacity>
         </View>
         <View>
           <Counter />
         </View>
-        <TouchableOpacity style={styles.btn}
-          onPress={signOut}>
+        <TouchableOpacity style={styles.btn} onPress={signOut}>
           <Icon name="log-out" size={20} color={colors.backgroundCol} />
         </TouchableOpacity>
       </View>
