@@ -8,6 +8,7 @@ import Geolocation from '@react-native-community/geolocation';
 import {
   GoogleSignin,
 } from '@react-native-google-signin/google-signin';
+import store from '../redux/store';
 
 import * as colors from '../components/Colors';
 import * as utils from '../components/Utils';
@@ -21,6 +22,7 @@ let options = {
 };
 const initialState = {
   counter: 0,
+  email: '',
 };
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -31,7 +33,6 @@ const reducer = (state = initialState, action) => {
   }
   return state;
 };
-const store = createStore(reducer);
 
 const Profile = ({navigation, route}) => {
   const [latitude, setLatitude] = useState(0);
