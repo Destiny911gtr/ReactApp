@@ -94,7 +94,7 @@ const LoginView = ({navigation, route}) => {
           style={styles.loginBtn}
           onPress={() =>
             VerifyCredentials(email, password)
-              ? navigation.navigate('Profile', {email})
+              ? navigation.replace('ApiData')
               : null
           }>
           <Text style={styles.loginText}>Login</Text>
@@ -104,7 +104,6 @@ const LoginView = ({navigation, route}) => {
           size={GoogleSigninButton.Size.Standard}
           color={GoogleSigninButton.Color.Dark}
           onPress={signIn}
-          // disabled={isSigninInProgress}
         />
       </View>
     </View>

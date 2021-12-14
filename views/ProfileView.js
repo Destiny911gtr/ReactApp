@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, StatusBar, TouchableOpacity} from 'react-native';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
-import Geolocation from '@react-native-community/geolocation';
+
 import {
   GoogleSignin,
 } from '@react-native-google-signin/google-signin';
@@ -11,7 +11,7 @@ import {
 import * as colors from '../components/Colors';
 import * as utils from '../components/Utils';
 import styles from '../styles/ProfileView';
-import { increaseCounter, decreaseCounter } from '../redux/actions';
+import {increaseCounter, decreaseCounter, geoLocation} from '../redux/actions';
 
 let options = {
   storageOptions: {
@@ -21,25 +21,14 @@ let options = {
 };
 
 const ProfileView = ({ navigation, route }) => {
-  const { counter, email } = useSelector(state => state.reducer);
-  const [latitude, setLatitude] = useState(0);
-  const [longitude, setLongitude] = useState(0);
-  const dispatch = useDispatch();
-  utils.requestLocationPermission();
-  Geolocation.getCurrentPosition(
-    info => {
-      setLatitude(info.coords.latitude);
-      setLongitude(info.coords.longitude);
-      console.log(info.coords.latitude);
-      console.log(info.coords.longitude);
-    },
-    console.log('error getting location'),
-    {
-      enableHighAccuracy: false,
-      timeout: 20000,
-      maximumAge: 1000,
-    },
+  const {counter, email, latitude, longitude} = useSelector(
+    state => state.reducer,
   );
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(geoLocation());
+  }, []);
 
   signOut = async () => {
     try {

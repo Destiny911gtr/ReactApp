@@ -1,4 +1,7 @@
 import axios from 'axios';
+import Geolocation from '@react-native-community/geolocation';
+
+import * as utils from '../components/Utils';
 
 export const INCREASE_COUNTER = 'INCREASE_COUNTER';
 export const DECREASE_COUNTER = 'DECREASE_COUNTER';
@@ -6,61 +9,87 @@ export const SET_EMAIL = 'SET_EMAIL';
 export const SET_APIDATA = 'SET_APIDATA';
 export const SET_LOADING = 'SET_LOADING';
 export const SET_ERROR = 'SET_ERROR';
+export const SET_LATITUDE = 'SET_LATITUDE';
+export const SET_LONGITUDE = 'SET_LONGITUDE';
 
 const url = `https://www.swapi.it/api/people`;
 
 export function fetchApiData() {
-    return async (dispatch) => {
+  return async dispatch => {
+    dispatch({
+      type: SET_LOADING,
+      payload: true,
+    });
+    dispatch({
+      type: SET_ERROR,
+      payload: false,
+    });
+    try {
+      const response = await axios.get(url);
+      if (response) {
         dispatch({
-            type: SET_LOADING,
-            payload: true,
+          type: SET_APIDATA,
+          payload: response.data.results,
+        });
+        dispatch({
+          type: SET_LOADING,
+          payload: false,
         });
         dispatch({
           type: SET_ERROR,
           payload: false,
         });
-        try {
-            const response = await axios.get(url);
-            if (response) {
-                dispatch({
-                    type: SET_APIDATA,
-                    payload: response.data.results,
-                });
-                dispatch({
-                    type: SET_LOADING,
-                    payload: false,
-                });
-                dispatch({
-                  type: SET_ERROR,
-                  payload: false,
-                });
-            }
-        } catch (error) {
-            if (axios.isCancel(error)) {
-                dispatch({
-                    type: SET_LOADING,
-                    payload: false,
-                });
-                dispatch({
-                    type: SET_ERROR,
-                    payload: true,
-                });
-                console.log('Data fetching cancelled');
-            } else {
-                dispatch({
-                    type: SET_LOADING,
-                    payload: false,
-                });
-                dispatch({
-                    type: SET_ERROR,
-                    payload: true,
-                });
-                console.log('Error fetching data');
-            }
-        }
-    };
-};
+      }
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        dispatch({
+          type: SET_LOADING,
+          payload: false,
+        });
+        dispatch({
+          type: SET_ERROR,
+          payload: true,
+        });
+        console.log('Data fetching cancelled');
+      } else {
+        dispatch({
+          type: SET_LOADING,
+          payload: false,
+        });
+        dispatch({
+          type: SET_ERROR,
+          payload: true,
+        });
+        console.log('Error fetching data');
+      }
+    }
+  };
+}
 
+export function geoLocation() {
+  return async dispatch => {
+    utils.requestLocationPermission().then(() => {
+      Geolocation.getCurrentPosition(
+        info => {
+          dispatch({
+            type: SET_LATITUDE,
+            payload: info.coords.latitude,
+          });
+          dispatch({
+            type: SET_LONGITUDE,
+            payload: info.coords.longitude,
+          });
+        },
+        console.log('error getting location'),
+        {
+          enableHighAccuracy: false,
+          timeout: 20000,
+          maximumAge: 1000,
+        },
+      );
+    });
+  };
+}
 
 export const increaseCounter = counter => dispatch => {
   dispatch({
@@ -101,5 +130,19 @@ export const setError = error => dispatch => {
   dispatch({
     type: SET_ERROR,
     payload: error,
+  });
+};
+
+export const setLatitude = latitude => dispatch => {
+  dispatch({
+    type: SET_LATITUDE,
+    payload: latitude,
+  });
+};
+
+export const setLongitude = longitude => dispatch => {
+  dispatch({
+    type: SET_LONGITUDE,
+    payload: longitude,
   });
 };
