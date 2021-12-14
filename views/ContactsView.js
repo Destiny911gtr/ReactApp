@@ -3,14 +3,13 @@ import {
   PermissionsAndroid,
   Platform,
   SafeAreaView,
-  StyleSheet,
   View,
   FlatList,
 } from 'react-native';
 
 import Contacts from 'react-native-contacts';
 import ListView from '../components/ListView';
-import * as colors from '../components/Colors';
+import styles from '../styles/ContactsView';
 
 const ContactsView = () => {
   let [contacts, setContacts] = useState([]);
@@ -67,12 +66,5 @@ const ContactsView = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.backgroundCol,
-  },
-});
 
 export default ContactsView;

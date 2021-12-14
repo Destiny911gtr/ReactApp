@@ -5,8 +5,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import messaging from '@react-native-firebase/messaging';
 import Icon from 'react-native-vector-icons/Feather';
 
-import LoginPage from './views/LoginPage';
-import Profile from './views/Profile';
+import LoginView from './views/LoginView';
+import ProfileView from './views/ProfileView';
 import ContactsView from './views/ContactsView';
 import DataView from './views/DataView';
 import ImageView from './views/ImageView';
@@ -53,7 +53,7 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen
           name="Login"
-          component={LoginPage}
+          component={LoginView}
           options={{
             headerTintColor: colors.foregroundCol,
             headerStyle: {backgroundColor: colors.backgroundCol},
@@ -61,7 +61,7 @@ export default function App() {
         />
         <Stack.Screen
           name="Profile"
-          component={Profile}
+          component={ProfileView}
           options={{
             headerTintColor: colors.foregroundCol,
             headerStyle: {backgroundColor: colors.backgroundCol},

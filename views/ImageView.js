@@ -1,8 +1,8 @@
 // Image view to view passed image file path
 import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Image } from "react-native";
 
-import * as colors from '../components/Colors';
+import styles from "../styles/ImageView";
 
 const ImageView = ({ route }) => {
     const imagePath = route.params.image;
@@ -21,16 +21,3 @@ const ImageView = ({ route }) => {
 }
 
 export default ImageView;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.backgroundCol,
-  },
-  image: {
-    flex: 1,
-    resizeMode: 'contain',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});

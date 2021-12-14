@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StatusBar,
-  StyleSheet,
   TextInput,
   TouchableOpacity,
   Image,
@@ -16,10 +15,11 @@ import {
 
 import {VerifyCredentials} from '../components/Utils';
 import * as colors from '../components/Colors';
+import styles from '../styles/LoginView';
 
 GoogleSignin.configure();
 
-const LoginPage = ({navigation, route}) => {
+const LoginView = ({navigation, route}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [userInfo, setUserInfo] = useState(route.params?.userInfo ?? null);
@@ -108,61 +108,4 @@ const LoginPage = ({navigation, route}) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.backgroundCol,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logoContainer: {
-    flex: 2,
-    justifyContent: 'center',
-    alignContent: 'center',
-    paddingBottom: 20,
-    paddingTop: '20%',
-    width: '100%',
-  },
-  inputContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-  },
-  buttonContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    paddingBottom:'20%',
-  },
-  logo: {
-    width: '70%',
-    resizeMode: 'contain',
-    alignSelf: 'center',
-  },
-  loginText: {
-    color: colors.backgroundCol,
-  },
-  loginBtn: {
-    width: '70%',
-    borderRadius: 10,
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 30,
-    color: colors.backgroundCol,
-    backgroundColor: colors.primaryCol,
-  },
-  textInput: {
-    width: '70%',
-    paddingLeft: 20,
-    marginBottom: 10,
-    borderRadius: 10,
-    backgroundColor: colors.secondaryCol,
-    color: colors.foregroundCol,
-    alignItems: 'center',
-  },
-});
-
-export default LoginPage;
+export default LoginView;

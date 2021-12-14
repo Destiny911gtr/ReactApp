@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, StatusBar, ToastAndroid, TouchableOpacity} from 'react-native';
+import {View, Text, StatusBar, TouchableOpacity} from 'react-native';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import {Provider} from 'react-redux';
 import {createStore} from 'redux';
@@ -13,6 +13,7 @@ import store from '../redux/store';
 import * as colors from '../components/Colors';
 import * as utils from '../components/Utils';
 import Counter from '../components/CounterComponent';
+import styles from '../styles/ProfileView';
 
 let options = {
   storageOptions: {
@@ -34,7 +35,7 @@ const reducer = (state = initialState, action) => {
   return state;
 };
 
-const Profile = ({navigation, route}) => {
+const ProfileView = ({navigation, route}) => {
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
   utils.requestLocationPermission();
@@ -62,7 +63,6 @@ const Profile = ({navigation, route}) => {
     }
   };
 
-
   return (
     <Provider store={store}>
       <View style={styles.container}>
@@ -87,11 +87,17 @@ const Profile = ({navigation, route}) => {
                   } else if (response.error) {
                     console.log('Camera Error: ', response.error);
                   } else {
-                    const source = {uri: JSON.stringify(response.assets[0].uri).replace(/['"]+/g, '')};
+                    const source = {
+                      uri: JSON.stringify(response.assets[0].uri).replace(
+                        /['"]+/g,
+                        '',
+                      ),
+                    };
                     navigation.navigate('ImageView', {image: source.uri});
                   }
                 });
-              })}>
+              })
+            }>
             <Icon name="camera" size={20} color={colors.backgroundCol} />
           </TouchableOpacity>
           <TouchableOpacity
@@ -105,9 +111,14 @@ const Profile = ({navigation, route}) => {
                 } else if (response.error) {
                   console.log('ImagePicker Error: ', response.error);
                 } else {
-                  const source = { uri: response.assets[0].uri };
+                  const source = {uri: response.assets[0].uri};
                   console.log(response.assets[0].uri);
-                  navigation.navigate('ImageView', {image: JSON.stringify(response.assets[0].uri).replace(/['"]+/g, '')});
+                  navigation.navigate('ImageView', {
+                    image: JSON.stringify(response.assets[0].uri).replace(
+                      /['"]+/g,
+                      '',
+                    ),
+                  });
                 }
               })
             }>
@@ -130,36 +141,4 @@ const Profile = ({navigation, route}) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.backgroundCol,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  box: {
-    padding: 20,
-    borderRadius: 10,
-    backgroundColor: colors.secondaryCol,
-    alignItems: 'center',
-  },
-  text: {
-    color: colors.foregroundCol,
-  },
-  btnText: {
-    color: colors.backgroundCol,
-  },
-  btn: {
-    width: 50,
-    height: 50,
-    borderRadius: 100,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginHorizontal: 10,
-    marginVertical: 20,
-    color: colors.backgroundCol,
-    backgroundColor: colors.primaryCol,
-  },
-});
-
-export default Profile;
+export default ProfileView;
