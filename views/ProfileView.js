@@ -1,8 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, StatusBar, TouchableOpacity} from 'react-native';
-import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
-import {Provider} from 'react-redux';
-import {createStore} from 'redux';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
+import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
 import Geolocation from '@react-native-community/geolocation';
 import {
@@ -11,8 +10,8 @@ import {
 
 import * as colors from '../components/Colors';
 import * as utils from '../components/Utils';
-import Counter from '../components/CounterComponent';
 import styles from '../styles/ProfileView';
+import { increaseCounter, decreaseCounter } from '../redux/actions';
 
 let options = {
   storageOptions: {
@@ -20,23 +19,12 @@ let options = {
     path: 'images',
   },
 };
-const initialState = {
-  counter: 0,
-};
-const reducer = (state = initialState, action) => {
-  switch (action.type) {
-    case 'INCREASE_COUNTER':
-      return {counter: state.counter + 1};
-    case 'DECREASE_COUNTER':
-      return {counter: state.counter - 1};
-  }
-  return state;
-};
-const store = createStore(reducer);
 
-const ProfileView = ({navigation, route}) => {
+const ProfileView = ({ navigation, route }) => {
+  const { counter, email } = useSelector(state => state.reducer);
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
+  const dispatch = useDispatch();
   utils.requestLocationPermission();
   Geolocation.getCurrentPosition(
     info => {
@@ -63,80 +51,90 @@ const ProfileView = ({navigation, route}) => {
   };
 
   return (
-    <Provider store={store}>
-      <View style={styles.container}>
-        <StatusBar translucent backgroundColor="transparent" />
-        <View style={styles.box}>
-          <Text style={styles.text}>
-            Email: {route.params?.email ?? 'Not Available'}
-          </Text>
-          <Text style={styles.text}>Latitude: {latitude}</Text>
-          <Text style={styles.text}>Longitude: {longitude}</Text>
-        </View>
-        <View style={[{flexDirection: 'row'}]}>
-          <TouchableOpacity
-            style={styles.btn}
-            onPress={() =>
-              utils.requestCameraPermission().then(() => {
-                launchCamera(options, response => {
-                  console.log('Response = ', response);
-
-                  if (response.didCancel) {
-                    console.log('User cancelled image capture');
-                  } else if (response.error) {
-                    console.log('Camera Error: ', response.error);
-                  } else {
-                    const source = {
-                      uri: JSON.stringify(response.assets[0].uri).replace(
-                        /['"]+/g,
-                        '',
-                      ),
-                    };
-                    navigation.navigate('ImageView', {image: source.uri});
-                  }
-                });
-              })
-            }>
-            <Icon name="camera" size={20} color={colors.backgroundCol} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.btn}
-            onPress={() =>
-              launchImageLibrary(options, response => {
-                // console.log('Response = ', response);
+    <View style={styles.container}>
+      <StatusBar translucent backgroundColor="transparent" />
+      <View style={styles.box}>
+        <Text style={styles.text}>
+          Email: {email}
+        </Text>
+        <Text style={styles.text}>Latitude: {latitude}</Text>
+        <Text style={styles.text}>Longitude: {longitude}</Text>
+      </View>
+      <View style={[{flexDirection: 'row'}]}>
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={() =>
+            utils.requestCameraPermission().then(() => {
+              launchCamera(options, response => {
+                console.log('Response = ', response);
 
                 if (response.didCancel) {
-                  console.log('User cancelled image picker');
+                  console.log('User cancelled image capture');
                 } else if (response.error) {
-                  console.log('ImagePicker Error: ', response.error);
+                  console.log('Camera Error: ', response.error);
                 } else {
-                  const source = {uri: response.assets[0].uri};
-                  console.log(response.assets[0].uri);
-                  navigation.navigate('ImageView', {
-                    image: JSON.stringify(response.assets[0].uri).replace(
+                  const source = {
+                    uri: JSON.stringify(response.assets[0].uri).replace(
                       /['"]+/g,
                       '',
                     ),
-                  });
+                  };
+                  navigation.navigate('ImageView', {image: source.uri});
                 }
-              })
-            }>
-            <Icon name="image" size={20} color={colors.backgroundCol} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.btn}
-            onPress={() => navigation.navigate('Contacts')}>
-            <Icon name="users" size={20} color={colors.backgroundCol} />
-          </TouchableOpacity>
-        </View>
-        <View>
-          <Counter />
-        </View>
-        <TouchableOpacity style={styles.btn} onPress={signOut}>
-          <Icon name="log-out" size={20} color={colors.backgroundCol} />
+              });
+            })
+          }>
+          <Icon name="camera" size={20} color={colors.backgroundCol} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={() =>
+            launchImageLibrary(options, response => {
+              // console.log('Response = ', response);
+
+              if (response.didCancel) {
+                console.log('User cancelled image picker');
+              } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+              } else {
+                const source = {uri: response.assets[0].uri};
+                console.log(response.assets[0].uri);
+                navigation.navigate('ImageView', {
+                  image: JSON.stringify(response.assets[0].uri).replace(
+                    /['"]+/g,
+                    '',
+                  ),
+                });
+              }
+            })
+          }>
+          <Icon name="image" size={20} color={colors.backgroundCol} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={() => navigation.navigate('Contacts')}>
+          <Icon name="users" size={20} color={colors.backgroundCol} />
         </TouchableOpacity>
       </View>
-    </Provider>
+      <View style={styles.countcontainer}>
+        <TouchableOpacity
+          style={styles.countbtns}
+          onPress={() => dispatch(decreaseCounter())}>
+          <Icon name="chevron-left" size={20} color={colors.backgroundCol} />
+        </TouchableOpacity>
+
+        <Text style={styles.counttext}>{counter}</Text>
+
+        <TouchableOpacity
+          style={styles.countbtns}
+          onPress={() => dispatch(increaseCounter())}>
+          <Icon name="chevron-right" size={20} color={colors.backgroundCol} />
+        </TouchableOpacity>
+      </View>
+      <TouchableOpacity style={styles.btn} onPress={signOut}>
+        <Icon name="log-out" size={20} color={colors.backgroundCol} />
+      </TouchableOpacity>
+    </View>
   );
 };
 

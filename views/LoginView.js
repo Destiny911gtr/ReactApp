@@ -12,20 +12,23 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
+import { useSelector, useDispatch } from 'react-redux';
 
 import {VerifyCredentials} from '../components/Utils';
 import * as colors from '../components/Colors';
 import styles from '../styles/LoginView';
+import { setEmail } from '../redux/actions';
 
 GoogleSignin.configure();
 
 const LoginView = ({navigation, route}) => {
-  const [email, setEmail] = useState('');
+  const { email } = useSelector(state => state.reducer);
   const [password, setPassword] = useState('');
   const [userInfo, setUserInfo] = useState(route.params?.userInfo ?? null);
+  const dispatch = useDispatch();
 
   const handleEmailInput = text => {
-    setEmail(text);
+    dispatch(setEmail(text));
   };
 
   const handlePasswordInput = text => {
@@ -41,7 +44,7 @@ const LoginView = ({navigation, route}) => {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       setUserInfoToState({ userInfo });
-      setEmail(userInfo.user.email);
+      dispatch(setEmail(userInfo.user.email));
       navigation.replace('ApiData');
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {

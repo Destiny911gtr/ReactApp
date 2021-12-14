@@ -5,38 +5,22 @@ import {
   StyleSheet,
   FlatList,
 } from 'react-native';
-import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
 
 import styles from '../styles/DataView';
+import {fetchApiData} from '../redux/actions';
 
 const DataView = () => {
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data, loading, error } = useSelector(state => state.reducer);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const source = axios.CancelToken.source();
-    const url = `https://www.swapi.it/api/people`;
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get(url, { cancelToken: source.token });
-        console.log(response.data);
-        setIsLoading(false);
-        setData(response.data.results);
-      } catch (error) {
-        if (axios.isCancel(error)) {
-          console.log('Data fetching cancelled');
-        } else {
-          console.log('Error fetching data');
-        }
-      }
-    };
-    fetchUsers();
-    return () => source.cancel('Data fetching cancelled');
+    dispatch(fetchApiData());
   }, []);
 
   return (
     <View style={styles.container}>
-      {!isLoading && (
+      {!loading && !error && (
         <View style={styles.listContainer}>
           <FlatList
             data={data}
@@ -66,9 +50,14 @@ const DataView = () => {
           />
         </View>
       )}
-      {isLoading && (
-        <View style={styles.LoadingContainer}>
+      {loading && !error && (
+        <View style={styles.loadingContainer}>
           <Text>Loading</Text>
+        </View>
+      )}
+      {!loading && error && (
+        <View style={styles.errorContainer}>
+          <Text>Error loading data</Text>
         </View>
       )}
     </View>
