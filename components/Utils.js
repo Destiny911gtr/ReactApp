@@ -63,3 +63,26 @@ export async function requestCameraPermission() {
     console.warn(err);
   }
 }
+//
+// Request contacts permission
+//
+export async function requestContactsPermission() {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
+      {
+        title: 'Contacts Permission',
+        message:
+          'This App needs access to your contacts ' +
+          'so we can know who you are.',
+      },
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log('You can use contacts ');
+    } else {
+      console.log('Contacts permission denied');
+    }
+  } catch (err) {
+    console.warn(err);
+  }
+}

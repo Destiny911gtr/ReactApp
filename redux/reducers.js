@@ -7,6 +7,7 @@ import {
   SET_ERROR,
   SET_LATITUDE,
   SET_LONGITUDE,
+  SET_CONTACTS,
 } from './actions';
 
 const initialState = {
@@ -17,6 +18,7 @@ const initialState = {
   error: false,
   latitude: 0,
   longitude: 0,
+  contacts: [],
 };
 
 function reducer(state = initialState, action) {
@@ -60,6 +62,11 @@ function reducer(state = initialState, action) {
       return {
         ...state,
         longitude: action.payload,
+      };
+    case SET_CONTACTS:
+      return {
+        ...state,
+        contacts: action.payload,
       };
     default:
       return state;

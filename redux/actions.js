@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Geolocation from '@react-native-community/geolocation';
+import Contacts from 'react-native-contacts';
 
 import * as utils from '../components/Utils';
 
@@ -11,6 +12,7 @@ export const SET_LOADING = 'SET_LOADING';
 export const SET_ERROR = 'SET_ERROR';
 export const SET_LATITUDE = 'SET_LATITUDE';
 export const SET_LONGITUDE = 'SET_LONGITUDE';
+export const SET_CONTACTS = 'SET_CONTACTS';
 
 const url = `https://www.swapi.it/api/people`;
 
@@ -66,7 +68,7 @@ export function fetchApiData() {
   };
 }
 
-export function geoLocation() {
+export function getLocation() {
   return async dispatch => {
     utils.requestLocationPermission().then(() => {
       Geolocation.getCurrentPosition(
@@ -87,6 +89,28 @@ export function geoLocation() {
           maximumAge: 1000,
         },
       );
+    });
+  };
+}
+
+export function getContacts() {
+  return async dispatch => {
+    utils.requestContactsPermission().then(() => {
+      Contacts.getAll()
+        .then(contacts => {
+          {
+            contacts.sort(
+              (a, b) => a.givenName.toLowerCase() > b.givenName.toLowerCase(),
+            );
+            dispatch({
+              type: SET_CONTACTS,
+              payload: contacts,
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     });
   };
 }

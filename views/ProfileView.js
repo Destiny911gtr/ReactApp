@@ -11,7 +11,7 @@ import {
 import * as colors from '../components/Colors';
 import * as utils from '../components/Utils';
 import styles from '../styles/ProfileView';
-import {increaseCounter, decreaseCounter, geoLocation} from '../redux/actions';
+import {increaseCounter, decreaseCounter, getLocation} from '../redux/actions';
 
 let options = {
   storageOptions: {
@@ -27,7 +27,7 @@ const ProfileView = ({ navigation, route }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(geoLocation());
+    dispatch(getLocation());
   }, []);
 
   signOut = async () => {

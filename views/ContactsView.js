@@ -1,4 +1,5 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 import {
   PermissionsAndroid,
   Platform,
@@ -7,42 +8,17 @@ import {
   FlatList,
 } from 'react-native';
 
-import Contacts from 'react-native-contacts';
 import ListView from '../components/ListView';
 import styles from '../styles/ContactsView';
+import {getContacts} from '../redux/actions';
 
 const ContactsView = () => {
-  let [contacts, setContacts] = useState([]);
+  const { contacts } = useSelector(state => state.reducer);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (Platform.OS === 'android') {
-      PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS, {
-        title: 'Contacts',
-        message: 'This app would like to view your contacts.',
-      }).then(() => {
-        loadContacts();
-      });
-    } else {
-      loadContacts();
-    }
+    dispatch(getContacts());
   }, []);
-
-  const loadContacts = () => {
-    Contacts.getAll()
-      .then(contacts => {
-        contacts.sort(
-          (a, b) => a.givenName.toLowerCase() > b.givenName.toLowerCase(),
-        );
-        console.log('contacts -> ', contacts);
-        setContacts(contacts);
-      })
-      .catch(err => {
-        if (err === 'denied') {
-          alert('Permission to access contacts was denied');
-          console.warn('Permission to access contacts was denied');
-        }
-      });
-  };
 
   return (
     <SafeAreaView style={styles.container}>
