@@ -3,6 +3,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {
   PermissionsAndroid,
   Platform,
+  StatusBar,
   SafeAreaView,
   View,
   FlatList,
@@ -22,6 +23,7 @@ const ContactsView = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar translucent backgroundColor="transparent" />
       <View style={styles.container}>
         <FlatList
           data={contacts}
@@ -29,12 +31,7 @@ const ContactsView = () => {
             {
               console.log('contact -> ' + JSON.stringify(contact));
             }
-            return (
-              <ListView
-                key={contact.item.recordID}
-                item={contact.item}
-              />
-            );
+            return <ListView key={contact.item.recordID} item={contact.item} />;
           }}
           keyExtractor={item => item.recordID}
         />

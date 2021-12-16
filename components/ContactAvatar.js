@@ -2,10 +2,10 @@
 // https://aboutreact.com/access-contact-list-react-native/
 
 import React from 'react';
-import {Image, View, Text, StyleSheet} from 'react-native';
+import {Image, View, Text} from 'react-native';
 import PropTypes from 'prop-types';
 
-import * as colors from './Colors';
+import styles from '../styles/ContactsView';
 
 const Avatar = props => {
   const renderImage = () => {
@@ -48,38 +48,11 @@ const Avatar = props => {
   const {img, width, height} = props;
   const {container} = styles;
   return (
-    <View style={[container, props.style, {width, height}]}>
+    <View style={[styles.iconContainer, props.style, {width, height}]}>
       {img ? renderImage() : renderPlaceholder()}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-  },
-  imageContainer: {
-    overflow: 'hidden',
-    justifyContent: 'center',
-    height: '100%',
-  },
-  image: {
-    flex: 1,
-    alignSelf: 'stretch',
-    width: undefined,
-    height: undefined,
-  },
-  placeholderContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.primaryCol,
-    height: '100%',
-  },
-  placeholderText: {
-    fontWeight: '700',
-    color: colors.foregroundCol,
-  },
-});
 
 Avatar.propTypes = {
   img: Image.propTypes.source,

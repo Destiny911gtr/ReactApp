@@ -3,6 +3,7 @@ import {
   View,
   Text,
   StyleSheet,
+  StatusBar,
   FlatList,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
@@ -20,6 +21,7 @@ const DataView = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar translucent backgroundColor="transparent" />
       {!loading && !error && (
         <View style={styles.listContainer}>
           <FlatList
@@ -27,7 +29,7 @@ const DataView = () => {
             keyExtractor={data => data.id}
             renderItem={({item}) => {
               return (
-                <View style={{paddingBottom: '2%'}}>
+                <View style={styles.itemBackground}>
                   <Text style={styles.headerText}>
                     {item.name} - {item.gender}
                   </Text>
@@ -37,13 +39,6 @@ const DataView = () => {
                   <Text style={styles.subText}>
                     Weight: {item.mass}, Birth: {item.birth_year}
                   </Text>
-                  <View
-                    style={{
-                      paddingTop: '2%',
-                      borderBottomWidth: StyleSheet.hairlineWidth,
-                      borderColor: '#515151',
-                    }}
-                  />
                 </View>
               );
             }}

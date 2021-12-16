@@ -58,47 +58,47 @@ export default function App() {
             name="Login"
             component={LoginView}
             options={{
-              headerTintColor: colors.foregroundCol,
-              headerStyle: {backgroundColor: colors.backgroundCol},
+              headerTintColor: colors.backgroundCol,
+              headerStyle: {backgroundColor: colors.primaryCol},
             }}
           />
           <Stack.Screen
             name="Profile"
             component={ProfileView}
             options={{
-              headerTintColor: colors.foregroundCol,
-              headerStyle: {backgroundColor: colors.backgroundCol},
+              headerTintColor: colors.backgroundCol,
+              headerStyle: {backgroundColor: colors.primaryCol},
             }}
           />
           <Stack.Screen
             name="Contacts"
             component={ContactsView}
             options={{
-              headerTintColor: colors.foregroundCol,
-              headerStyle: {backgroundColor: colors.backgroundCol},
+              headerTintColor: colors.backgroundCol,
+              headerStyle: {backgroundColor: colors.primaryCol},
             }}
           />
           <Stack.Screen
             name="ImageView"
             component={ImageView}
             options={{
-              headerTintColor: colors.foregroundCol,
-              headerStyle: {backgroundColor: colors.backgroundCol},
+              headerTintColor: colors.backgroundCol,
+              headerStyle: {backgroundColor: colors.primaryCol},
             }}
           />
           <Stack.Screen
             name="ApiData"
             component={DataView}
             options={({navigation}) => ({
-              headerTintColor: colors.foregroundCol,
-              headerStyle: {backgroundColor: colors.backgroundCol},
+              headerTintColor: colors.backgroundCol,
+              headerStyle: {backgroundColor: colors.primaryCol},
               headerRight: () => (
                 <TouchableOpacity
                   onPress={() => navigation.navigate('Profile')}>
                   <Icon
                     name="settings"
                     size={20}
-                    color={colors.foregroundCol}
+                    color={colors.backgroundCol}
                   />
                 </TouchableOpacity>
               ),

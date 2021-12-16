@@ -102,9 +102,21 @@ export function getContacts() {
             contacts.sort(
               (a, b) => a.givenName.toLowerCase() > b.givenName.toLowerCase(),
             );
+            const trimmedContacts = contacts
+              .filter(c => c.phoneNumbers.length > 0)
+              .map(c => {
+                return {
+                  hasThumbnail: c['hasThumbnail'],
+                  thumbnailPath: c['thumbnailPath'],
+                  givenName: c['givenName'],
+                  familyName: c['familyName'],
+                  recordID: c['recordID'],
+                  phoneNumbers: c['phoneNumbers'],
+                };
+              });
             dispatch({
               type: SET_CONTACTS,
-              payload: contacts,
+              payload: trimmedContacts,
             });
           }
         })

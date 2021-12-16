@@ -6,7 +6,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.backgroundCol,
-    paddingHorizontal: 10,
     alignItems: 'center',
   },
   listContainer: {
@@ -27,19 +26,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  listItem: {
-    paddingBottom: '3%',
-    borderBottomWidth: StyleSheet.hairlineWidth,
+  itemBackground: {
+    backgroundColor: colors.secondaryCol,
+    borderRadius: 10,
+    padding: 10,
+    marginVertical: '2%',
+    marginHorizontal: '2%',
   },
   headerText: {
+    color: colors.primaryCol,
     fontWeight: 'bold',
     fontSize: 16,
   },
   subText: {
+    color: colors.textCol,
     fontSize: 14,
   },
   listItem: {
     flex: 1,
+  },
+  borderLine: {
+    paddingTop: '2%',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.borderCol,
   },
 });
 

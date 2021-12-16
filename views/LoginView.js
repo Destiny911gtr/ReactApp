@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
   StatusBar,
+  ScrollView,
   TextInput,
   TouchableOpacity,
   Image,
@@ -12,17 +13,18 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-import { useSelector, useDispatch } from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 import {VerifyCredentials} from '../components/Utils';
 import * as colors from '../components/Colors';
 import styles from '../styles/LoginView';
-import { setEmail } from '../redux/actions';
+import {setEmail} from '../redux/actions';
+import KeyboardAvoidingView from 'react-native/Libraries/Components/Keyboard/KeyboardAvoidingView';
 
 GoogleSignin.configure();
 
 const LoginView = ({navigation, route}) => {
-  const { email } = useSelector(state => state.reducer);
+  const {email} = useSelector(state => state.reducer);
   const [password, setPassword] = useState('');
   const [userInfo, setUserInfo] = useState(route.params?.userInfo ?? null);
   const dispatch = useDispatch();
@@ -43,7 +45,7 @@ const LoginView = ({navigation, route}) => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      setUserInfoToState({ userInfo });
+      setUserInfoToState({userInfo});
       dispatch(setEmail(userInfo.user.email));
       navigation.replace('ApiData');
     } catch (error) {
@@ -64,49 +66,51 @@ const LoginView = ({navigation, route}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <StatusBar translucent backgroundColor="transparent" />
-      <View style={styles.logoContainer}>
-        <Image
-          style={styles.logo}
-          source={require('../assets/images/login_image.png')}
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Email"
-          placeholderTextColor={colors.foregroundCol}
-          onChangeText={handleEmailInput}
-          value={email}
-        />
-        <TextInput
-          style={styles.textInput}
-          placeholder="Password"
-          placeholderTextColor={colors.foregroundCol}
-          onChangeText={handlePasswordInput}
-          secureTextEntry={true}
-          value={password}
-        />
-      </View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={styles.loginBtn}
-          onPress={() =>
-            VerifyCredentials(email, password)
-              ? navigation.replace('ApiData')
-              : null
-          }>
-          <Text style={styles.loginText}>Login</Text>
-        </TouchableOpacity>
-        <GoogleSigninButton
-          style={{width: 140, height: 48, marginTop: 20}}
-          size={GoogleSigninButton.Size.Standard}
-          color={GoogleSigninButton.Color.Dark}
-          onPress={signIn}
-        />
-      </View>
-    </View>
+    <ScrollView>
+      <KeyboardAvoidingView style={styles.container}>
+        <StatusBar translucent backgroundColor="transparent" />
+        <View style={styles.logoContainer}>
+          <Image
+            style={styles.logo}
+            source={require('../assets/images/login_image.png')}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.textInput}
+            placeholder="Email"
+            placeholderTextColor={colors.foregroundCol}
+            onChangeText={handleEmailInput}
+            value={email}
+          />
+          <TextInput
+            style={styles.textInput}
+            placeholder="Password"
+            placeholderTextColor={colors.foregroundCol}
+            onChangeText={handlePasswordInput}
+            secureTextEntry={true}
+            value={password}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.loginBtn}
+            onPress={() =>
+              VerifyCredentials(email, password)
+                ? navigation.replace('ApiData')
+                : null
+            }>
+            <Text style={styles.loginText}>Login</Text>
+          </TouchableOpacity>
+          <GoogleSigninButton
+            style={{width: 140, height: 48, marginTop: 20}}
+            size={GoogleSigninButton.Size.Standard}
+            color={GoogleSigninButton.Color.Dark}
+            onPress={signIn}
+          />
+        </View>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
