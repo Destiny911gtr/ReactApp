@@ -3,6 +3,9 @@ import { StyleSheet } from 'react-native';
 import * as colors from '../components/Colors';
 
 const styles = StyleSheet.create({
+  scrollView: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: colors.backgroundCol,
@@ -10,10 +13,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logoContainer: {
-    flex: 2,
-    justifyContent: 'center',
+    flex: 4,
+    // justifyContent: 'center',
     alignContent: 'center',
-    paddingBottom: 20,
     paddingTop: '20%',
     width: '100%',
   },
@@ -28,10 +30,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    paddingBottom: '20%',
+    paddingVertical: '5%',
   },
   logo: {
-    width: '70%',
+    width: '80%',
     resizeMode: 'contain',
     alignSelf: 'center',
   },
@@ -42,9 +44,9 @@ const styles = StyleSheet.create({
     width: '70%',
     borderRadius: 10,
     height: 50,
+    marginTop: '5%',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 30,
     color: colors.backgroundCol,
     backgroundColor: colors.primaryCol,
   },

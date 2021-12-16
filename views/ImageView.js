@@ -1,6 +1,6 @@
 // Image view to view passed image file path
 import React from "react";
-import { View, Image } from "react-native";
+import { View, Image, StatusBar } from "react-native";
 
 import styles from "../styles/ImageView";
 
@@ -9,6 +9,7 @@ const ImageView = ({ route }) => {
     console.log(route.params.image);
     return (
       <View style={styles.container}>
+        <StatusBar translucent backgroundColor="transparent" />
         <Image
           source={{
             isStatic: true,

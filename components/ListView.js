@@ -6,6 +6,7 @@ import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
 
 import PropTypes from 'prop-types';
 import Avatar from './ContactAvatar';
+import styles from '../styles/ContactsView';
 
 const getAvatarInitials = textString => {
   if (!textString) return '';
@@ -21,7 +22,8 @@ const ListView = props => {
   const shouldComponentUpdate = () => {
     return false;
   };
-  const {item} = props;
+  const { item } = props;
+
   return (
     <View>
       <TouchableOpacity>
@@ -42,10 +44,7 @@ const ListView = props => {
                 style={
                   styles.titleStyle
                 }>{`${item.givenName} ${item.familyName}`}</Text>
-              <Text
-                style={
-                  styles.titleStyle
-                }>{`${item.phoneNumbers[0].number}`}</Text>
+              <Text style={ styles.numberStyle }>{`${item.phoneNumbers[0].number}`}</Text>
             </View>
           </View>
         </View>
@@ -53,35 +52,6 @@ const ListView = props => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  itemContainer: {
-    flexDirection: 'row',
-    minHeight: 44,
-    height: 63,
-  },
-  leftElementContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 2,
-    paddingLeft: 13,
-  },
-  rightSectionContainer: {
-    marginLeft: 18,
-    flexDirection: 'row',
-    flex: 20,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: '#515151',
-  },
-  mainTitleContainer: {
-    justifyContent: 'center',
-    flexDirection: 'column',
-    flex: 1,
-  },
-  titleStyle: {
-    fontSize: 16,
-  },
-});
 
 export default memo(ListView);
 
