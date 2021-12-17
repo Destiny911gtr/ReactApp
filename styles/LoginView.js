@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logoContainer: {
-    flex: 4,
+    flex: 0.7,
     // justifyContent: 'center',
     alignContent: 'center',
     paddingTop: '20%',
@@ -25,15 +25,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
   },
-  buttonContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    paddingVertical: '5%',
-  },
   logo: {
-    width: '80%',
+    width: '70%',
     resizeMode: 'contain',
     alignSelf: 'center',
   },

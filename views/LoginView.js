@@ -113,7 +113,6 @@ const LoginView = ({navigation, route}) => {
               onPress={signIn}
             />
           </KeyboardAvoidingView>
-          <View style={styles.buttonContainer}></View>
         </View>
       </ScrollView>
     </View>
