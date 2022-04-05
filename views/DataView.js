@@ -1,21 +1,26 @@
 import React, {useState, useEffect} from 'react';
 import {
+  RefreshControl,
   View,
   Text,
   StyleSheet,
   StatusBar,
   FlatList,
 } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 import styles from '../styles/DataView';
 import {fetchApiData} from '../redux/actions';
 
 const DataView = () => {
-  const { data, loading, error } = useSelector(state => state.reducer);
+  const {data, loading, error} = useSelector(state => state.reducer);
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(fetchApiData());
+  }, []);
+
+  const onRefresh = React.useCallback(() => {
     dispatch(fetchApiData());
   }, []);
 
@@ -25,6 +30,9 @@ const DataView = () => {
       {!loading && !error && (
         <View style={styles.listContainer}>
           <FlatList
+            refreshControl={
+              <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+            }
             data={data}
             keyExtractor={data => data.id}
             renderItem={({item}) => {
